@@ -58,7 +58,7 @@ This tier also is also the only tier that can directly access the database - whi
   **Amazon Aurora Serverless** is used as the database for the application. This database resides in the Data-tier and can only be directly accessed by the Logic tier. All valid user credentials are stored in this datbase.
   
   ## Extras
-  - **Terraform scripts** for provisioning AWS Cloud infrastructure.
+  - **Terraform scripts** for provisioning AWS Cloud Infrastructure.
    
        
 
