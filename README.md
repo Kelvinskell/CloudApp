@@ -34,6 +34,6 @@ This tier also is also the only tier that can directly access the database - whi
  The Presentation tier connects to this tier if user authentication from the previous step is successful.
  ### technical design
  - Three microservices are implemented at this phase of the Logic tier.
-   **- create-user service:** 
+   - **create-user service:** 
     
 
