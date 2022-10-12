@@ -34,6 +34,15 @@ This tier also is also the only tier that can directly access the database - whi
  The Presentation tier connects to this tier if user authentication from the previous step is successful.
  ### technical design
  - Three microservices are implemented at this phase of the Logic tier.
-   - **create-user service:** 
-    
+   - **create-user service:** This service is responsible for creating users.
+     - It interacts with the Data tier to create and store the user credentials.
+     - This service can only be accessed through the admin page in the Presentation layer - hence, access is restricted only to Admins.
+   - **provision-instance service:** This service provisons **EC2 instances**.
+     - It will provision an **Ec2 instance** complete with all necessary installations and configurations.
+     - It then return login details for the instance back to the Presentation layer - which will display this to the user.
+     - Instance details and user-details will be uploaded to an **S3 bucket** where they will be analysed by another service.
+     - It will also send an SNS Email notification to the Admin, about instance creation.
+   - **view-stats service:** This service provides a dashboard for admins to 
+     - 
+       
 
