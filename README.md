@@ -53,7 +53,7 @@ This tier also is also the only tier that can directly access the database - whi
   - **Helm** is utilised to package the Kubernetes manifests.
   
   ## Data Tier
-  **Amazon Aurora Serverless** is used as the database for the application. This database resides in the Data-tier and can only be directly accessed by the Data tier. All valid user credentials are stored in this datbase.
+  **Amazon Aurora Serverless** is used as the database for the application. This database resides in the Data-tier and can only be directly accessed by the Logic tier. All valid user credentials are stored in this datbase.
   
   ## Extras
   - **Terraform scripts** for provisioning AWS Cloud infrastructure.
