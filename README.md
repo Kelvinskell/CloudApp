@@ -9,6 +9,7 @@ The frontend is a Python Flask Web Application deployed in an **ECS Cluster.**
 - The Frontend accepts user credentials and supplies them to a RESTful **API Gateway**
 - The API Gateway invokes an **Express Step Function.**
 - The frontend also exposes an _Admin_ dashboard for viewing statistics and performimg administrative actions.
+  - The admin page contains other implementations such as user creation capability, application usage statistics and Stop-instance capability.
 
 This layer can only access the logic tier but not the Data tier.
 
@@ -25,6 +26,8 @@ This tier also is also the only tier that can directly access the database - whi
     - A lambda function sends an SNS message to the Admin, about a successful login. 
     - The flask application in the presentation tier then displays an authentication message to the user.
     - The **Step Function** exits.
+  - This phase also implements a **lambda function** that will be executed when the "Stop-instance" button in the Admin page is clicked.
+  - This function will abruptly shutdown the specified EC2 instance.
     
  ## Logic Tier - Phase 2
  This is the second part of the logic tier and implements the core functionalities of this application.
@@ -49,8 +52,11 @@ This tier also is also the only tier that can directly access the database - whi
   - The **EKS Cluster** uses an **AWS Load Balancer Controller** to expose the microservices and to perform path-based routing.
   - **Helm** is utilised to package the Kubernetes manifests.
   
-  ## Data tier
+  ## Data Tier
   **Amazon Aurora Serverless** is used as the database for the application. This database resides in the Data-tier and can only be directly accessed by the Data tier. All valid user credentials are stored in this datbase.
+  
+  ## Extras
+  
    
        
 
