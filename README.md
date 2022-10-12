@@ -49,6 +49,8 @@ This tier also is also the only tier that can directly access the database - whi
   - The **EKS Cluster** uses an **AWS Load Balancer Controller** to expose the microservices and to perform path-based routing.
   - **Helm** is utilised to package the Kubernetes manifests.
   
+  ## Data tier
+  **Amazon Aurora Serverless** is used as the database for the application. This database resides in the Data-tier and can only be directly accessed by the Data tier. All valid user credentials are stored in this datbase.
    
        
 
