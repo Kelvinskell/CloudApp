@@ -3,9 +3,11 @@ An Serverless, Cloud-Native application that provisions pre-configured EC2 insta
 
 This application is a Cloud-Native app, built using a serverless three-tier architecture. It is also built on AWS Cloud Infrastructure and is not designed to be cloud agnostic.
 
+The three-tier acrchitectuiire comprises of the **Presentation tier, Logic Tier and Application Tier.**
+
 ## Presentation Tier
 The frontend is a Python Flask Web Application deployed in an **ECS Cluster.**
-### Technical design
+### Technical Design
 - The Frontend accepts user credentials and supplies them to a RESTful **API Gateway**
 - The API Gateway invokes an **Express Step Function.**
 - The frontend also exposes an _Admin_ dashboard for viewing statistics and performimg administrative actions.
@@ -17,7 +19,7 @@ This layer can only access the logic tier but not the Data tier.
 The logic tier is where the core of the application resides. Phase 1 of this tier can only be accessed by the Presentation tier.
 
 This tier also is also the only tier that can directly access the database - which resides in the Data tier.
-### Technical design
+### Technical Design
 - The **Step Function** calls an "auth" **lambda function** to process the credentials passed to it by the Presentation tier.
 - This lambda function connects with the Data tier and checks the credentials against a user database. Based on the checks, this function will either return _"True"_ or _"False"._
   - If _False_, the **Step Function** will return an "Error" message to the Flask App in the Presentation Tier and then exits.
@@ -35,7 +37,7 @@ This tier also is also the only tier that can directly access the database - whi
  This phase is made up of an **EKS Cluster** which exposes three (3) services using a Microservices architecture.
  
  The Presentation tier connects to this tier if user authentication from the previous step is successful.
- ### technical design
+ ### Technical Design
  - Three microservices are implemented at this phase of the Logic tier.
    - **create-user service:** This service is responsible for creating users.
      - It interacts with the Data tier to create and store the user credentials.
