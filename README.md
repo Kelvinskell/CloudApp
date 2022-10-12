@@ -1,5 +1,5 @@
 # CloudApp
-An Serverless, Cloud-Native application that provisions pre-configured EC@ instances to authenticated users.
+An Serverless, Cloud-Native application that provisions pre-configured EC2 instances to authenticated users.
 
 This application is a Cloud-Native app, built using a serverless three-tier architecture. It is also built on AWS Cloud Infrastructure and is not designed to be cloud agnostic.
 
@@ -56,7 +56,7 @@ This tier also is also the only tier that can directly access the database - whi
   **Amazon Aurora Serverless** is used as the database for the application. This database resides in the Data-tier and can only be directly accessed by the Data tier. All valid user credentials are stored in this datbase.
   
   ## Extras
-  
+  - **Terraform scripts** for provisioning AWS Cloud infrastructure.
    
        
 
