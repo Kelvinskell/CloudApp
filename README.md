@@ -42,7 +42,7 @@ This tier also is also the only tier that can directly access the database - whi
      - It then return login details for the instance back to the Presentation layer - which will display this to the user.
      - Instance details and user-details will be uploaded to an **S3 bucket** where they will be analysed by another service.
      - It will also send an SNS Email notification to the Admin, about instance creation.
-   - **view-stats service:** This service provides a dashboard for admins to 
-     - 
+   - **view-stats service:** This service provides a dashboard for admins to view and analyse application state.
+     - Uses **Amazon Athena** to query the designated **S3 bucket** for data analysis and returns statistics to the presentation tier.
        
 
