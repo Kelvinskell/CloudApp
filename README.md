@@ -3,7 +3,7 @@ An Serverless, Cloud-Native application that provisions pre-configured EC2 insta
 
 This application is a Cloud-Native app, built using a serverless three-tier architecture. It is also built on AWS Cloud Infrastructure and is not designed to be cloud agnostic.
 
-The three-tier acrchitectuiire comprises of the **Presentation tier, Logic Tier and Application Tier.**
+The three-tier acrchitectuiire comprises of the **Presentation Tier, Logic Tier and Application Tier.**
 
 ## Presentation Tier
 The frontend is a Python Flask Web Application deployed in an **ECS Cluster.**
