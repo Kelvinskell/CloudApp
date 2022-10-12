@@ -20,15 +20,15 @@ The logic tier is where the core of the application resides. Phase 1 of this tie
 
 This tier also is also the only tier that can directly access the database - which resides in the Data tier.
 ### Technical Design
-- The **Step Function** calls an "auth" **lambda function** to process the credentials passed to it by the Presentation tier.
+- The **Step Function** calls an "auth" **Lambda Function** to process the credentials passed to it by the Presentation tier.
 - This lambda function connects with the Data tier and checks the credentials against a user database. Based on the checks, this function will either return _"True"_ or _"False"._
   - If _False_, the **Step Function** will return an "Error" message to the Flask App in the Presentation Tier and then exits.
   - The presentation Tier then displays an "Authentication Error" message to the user.
   - If _True_, a "Success" message is returned.
-    - A lambda function sends an SNS message to the Admin, about a successful login. 
+    - A **Lambda Function** sends an SNS message to the Admin, about a successful login. 
     - The flask application in the presentation tier then displays an authentication message to the user.
     - The **Step Function** exits.
-  - This phase also implements a **lambda function** that will be executed when the "Stop-instance" button in the Admin page is clicked.
+  - This phase also implements a **lambda Function** that will be executed when the "Stop-instance" button in the Admin page is clicked.
   - This function will abruptly shutdown the specified EC2 instance.
     
  ## Logic Tier - Phase 2
