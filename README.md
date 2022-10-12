@@ -40,9 +40,15 @@ This tier also is also the only tier that can directly access the database - whi
    - **provision-instance service:** This service provisons **EC2 instances**.
      - It will provision an **Ec2 instance** complete with all necessary installations and configurations.
      - It then return login details for the instance back to the Presentation layer - which will display this to the user.
-     - Instance details and user-details will be uploaded to an **S3 bucket** where they will be analysed by another service.
+     - Instance details and user-details will be uploaded to a designated **S3 bucket** where they will be analysed by another service.
      - It will also send an SNS Email notification to the Admin, about instance creation.
    - **view-stats service:** This service provides a dashboard for admins to view and analyse application state.
-     - Uses **Amazon Athena** to query the designated **S3 bucket** for data analysis and returns statistics to the presentation tier.
+     - Uses **Amazon Athena** to query the designated **S3 bucket** for data analysis and returns statistics to the Presentation tier.
+     - This service can only be accessed through the Admin page in the presentation tier.
+   
+  - The **EKS Cluster** uses an **AWS Load Balancer Controller** to expose the microservices and to perform path-based routing.
+  - **Helm** is utilised to package the Kubernetes manifests.
+  
+   
        
 
