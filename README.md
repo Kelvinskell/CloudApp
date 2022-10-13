@@ -25,6 +25,7 @@ This layer can only access the Logic tier but not the Data Tier.
 - The _Regular user_ page contains a "Create Instance" button and a "Stop instance" button.
   - Both of these buttons invoke the _provision-instance service_ in the Logic Tier.
   - The service willl either create or destroy an **Ec2 Instance** depending on the arguments passed.
+  
 - The Presentation layer then performs a GET Operation to an API Gateway to determine the status of the execution.
 
 
@@ -33,10 +34,11 @@ The first phase of this tier contains a series of lambda functions that help to 
 
 This tier also is also the only tier that can directly access the database - which resides in the Data tier.
 ### Technical Design
-- A **Lambda Function** is implemented here which polls the "login" **SQS Queue** in the phase 2 for execution 
-  - This phase also implements a "stop-ec2" **Lambda Function** that will be executed when the "Stop-instance" button in the Admin page is clicked.
-    - This function will abruptly shutdown the specified EC2 instance.
-  - This phase also implements an "auth" **Lambda Function** which is used by **Amazon Cognito** to perform post authentication steps.
+- A **Lambda Function** is implemented here which polls the "login" **SQS Queue** in the phase 2 for execution status.
+  - The message from the **SQS Queue** is then passed over to the **API Gateway** in the presentation Tier.
+- This phase implements a "stop-ec2" **Lambda Function** that will be executed when the "Stop-instance" button in the Admin page is clicked.
+  - This function will abruptly shutdown the specified EC2 instance.
+- This phase also implements an "auth" **Lambda Function** which is used by **Amazon Cognito** to perform post authentication steps (Send **SNS Notification**).
     
  ## Logic Tier - Phase 2
  This is the second part of the logic tier and implements the core functionalities of this application.
