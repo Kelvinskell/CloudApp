@@ -16,12 +16,12 @@ This layer can only access the Logic tier but not the Data Tier.
 - The frontend exposes a _Regular user_ page and an _Admin user_ page.
 - The _Admin user_ page requires additional authentication for access and is used for viewing application statistics and performing administrative actions.
 - The admin page contains implementations such as users dashboard, instance configuration dashboard, application usage statistics dashboard and Stop-instance button.
-     1. The _instance-configuration_ dashboard is used to define configuration details for EC2 Instances. 
-       - This is achived by interacting with the _configure instance_ service in the Logic tier.
+     1. The _instance-configuration_ dashboard is used to define configuration details for **EC2 Instances**. 
+       - This is achived by interacting with the _configure-instance_ service in the Logic tier.
     2. The _users dashboard_ is used to view number of active users, to create new users who can authenticate and access the application or delete users from the database.
        - Interaction with **Amazon Cognito** helps to achieve this.
     3. The _application usage statistics_ dashboard interacts with the _view-stats_ service in the Logic Tier
-       - The "Stop Instance" button is accessible from this dashboard and can be used by the Adminuser to force-stop any running instance.
+       - The "Stop Instance" button is accessible from this dashboard and can be used by the Admin user to force-stop any running instance.
 - The _Regular user_ page contains a "Create Instance" button and a "Stop instance" button.
   - Both of these buttons invoke the _provision-instance service_ in the Logic Tier.
   - The service willl either create or destroy an **Ec2 Instance** depending on the arguments passed.
