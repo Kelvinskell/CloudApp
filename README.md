@@ -9,7 +9,7 @@ The three-tier acrchitectuiire comprises of the **Presentation Tier, Logic Tier 
 The frontend is a Python Flask Web Application deployed in an **ECS Cluster** on Fargate.
 ### Technical Design
 - User creation, authetication and deletion is handled by **Amazon Cognito.**
-- **Amazon Cognito** is integrated with a post-authentication trigger which calls an "auth" **Lambda Function** from the Logic tier for further processing of the JSON Web Tokens (JWT) and sends an SNS Email to the Admins - when a new user is created.
+- **Amazon Cognito** is integrated with a post-authentication trigger which calls an "auth" **Lambda Function** for further processing of the JSON Web Tokens (JWT) and sends an SNS Email to the Admins - when a new user is created.
 - The frontend also exposes an _Admin_ dashboard for viewing statistics and performimg administrative actions.
   - The admin page contains other implementations such as users dashboard, instance configuration dashboard, application usage statistics dashboard and Stop-instance button.
      1. The _instance-configuration_ dashboard is used to define configuration details for EC2 Instances. 
