@@ -34,7 +34,7 @@ The first phase of this tier contains a series of lambda functions that help to 
 
 This tier also is also the only tier that can directly access the database - which resides in the Data tier.
 ### Technical Design
-- A **Lambda Function** is implemented here which polls the "login" **SQS Queue** in the phase 2 for execution status.
+- A **Lambda Function** is implemented here which polls the "exec" **SQS Queue** in the phase 2 for execution status.
   - The message from the **SQS Queue** is then passed over to the **API Gateway** in the presentation Tier.
 - This phase implements a "stop-ec2" **Lambda Function** that will be executed when the "Stop-instance" button in the Admin page is clicked.
   - This function will abruptly shutdown the specified EC2 instance.
@@ -61,7 +61,9 @@ This tier also is also the only tier that can directly access the database - whi
      - It reads configuration instructions from the database in the Data Tier and provisions the instance accoridng to specified configurations.
      - Instance details and user-details will be uploaded to a designated **S3 bucket** where they will be analysed by the _view-stats_ service_ service.
      - It will also send an SNS Email notification to the Admin, about instance creation.
-     - Instance login details are then sent to a "login" **SQS Queue** where they will be polled by the Presentation Tier - and displayed to the User.
+     - Instance login details are then sent to an "exec" **SQS Queue** where they will be polled by the Presentation Tier - and displayed to the User.
+     - Also responsible for shutting down instances.
+     - Will also send execution status message to the "exec" **SQS Queue**.
     
    
    
