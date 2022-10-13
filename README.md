@@ -6,7 +6,7 @@ This application is a Cloud-Native app, built using a serverless three-tier arch
 The three-tier acrchitectuiire comprises of the **Presentation Tier, Logic Tier and Application Tier.**
 
 ## Presentation Tier
-The frontend is a Python Flask Web Application deployed in an **ECS Fargate Cluster.**
+The frontend is a Python Flask Web Application deployed in an **ECS Cluster** on Fargate.
 ### Technical Design
 - The Frontend accepts user credentials and supplies them to a RESTful **API Gateway**
 - The API Gateway invokes an **Express Step Function.**
