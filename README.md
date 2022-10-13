@@ -9,15 +9,16 @@ The three-tier acrchitectuiire comprises of the **Presentation Tier, Logic Tier 
 The frontend is a Python Flask Web Application deployed in an **ECS Cluster** on Fargate.
 ### Technical Design
 - User creation, authetication and deletion is handled by **Amazon Cognito.**
-- **Amazon Cognito** is integrated with a post-authentication trigger which calls an "auth" **Lambda Function** from the Logic tier for further processing of the JSON Web Tokens (JWT) and persisting the data in the Data Tier if a new user is created.
-- If authentication is successful, a **Step Function** is invoked and a workflow begins in the Logic Tier.
+- **Amazon Cognito** is integrated with a post-authentication trigger which calls an "auth" **Lambda Function** from the Logic tier for further processing of the JSON Web Tokens (JWT) and sends an SNS Email to the Admins - when a new user is created.
 - The frontend also exposes an _Admin_ dashboard for viewing statistics and performimg administrative actions.
   - The admin page contains other implementations such as users dashboard, instance configuration dashboard, application usage statistics dashboard and Stop-instance button.
      1. The _instance-configuration_ dashboard is used to define configuration details for EC2 Instances. 
-       - Instructions are sent to a "config" **SQS Queue** from where they are read from a "config" **Lambda Function** in the Logic tier and persisted in the config database.
+       - Instructions are sent to a "config" **SQS Queue** from where they are read from a "config" **Lambda Function** in the Logic tier and persisted in the config Table in the Database.
     2. The _users dashboard_ is used to view number of active users, to create new users who can authenticate and access the application or delete users from the database.
        - Interaction with **Amazon Cognito** helps to achieve this.
     3. The _application usage statistics_ dashboard interacts with the _view-stats_ service in the Logic Tier.
+- The user page contains a "Create Instance" button and a "Stop instance" button.
+  - Both of these buttons connect to an API Gateway which will in turn, invoke a **Step Function.**
 
 This layer can only access the Logic tier but not the Data tier.
 
@@ -26,13 +27,14 @@ The logic tier is where the core of the application resides. Phase 1 of this tie
 
 This tier also is also the only tier that can directly access the database - which resides in the Data tier.
 ### Technical Design
-- The **Step Function** calls an "auth" **Lambda Function** to process the credentials passed to it by the Presentation tier.
-  - The **Step Function** uses a Choice state to detr 
-    - A "config" **Lambda Function** will check the  "config" **SQS Queue** for any new messages.
-      - If present, the function updates the "config" database with the latest configuration instructions.
+- The **Step Function** begins a workflow in a Choice State:
+   - A "config" **Lambda Function** will check the  "config" **SQS Queue** for any new messages.
+      - If present, the function updates the "config" Table in the Database with the latest configuration instructions.
+      - If not present, 
     - The **Step Function** exits.
-  - This phase also implements a **lambda Function** that will be executed when the "Stop-instance" button in the Admin page is clicked.
+  - This phase also implements a "stop-ec2" **Lambda Function** that will be executed when the "Stop-instance" button in the Admin page is clicked.
     - This function will abruptly shutdown the specified EC2 instance.
+  - This phase also implements an "auth" **Lambda Function** which is used by **Amazon Cognito** to perform post authentication steps.
     
  ## Logic Tier - Phase 2
  This is the second part of the logic tier and implements the core functionalities of this application.
