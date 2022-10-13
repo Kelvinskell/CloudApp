@@ -26,7 +26,7 @@ This layer can only access the Logic tier but not the Data Tier.
   - Both of these buttons invoke the _provision-instance service_ in the Logic Tier.
   - The service willl either create or destroy an **Ec2 Instance** depending on the arguments passed.
   
-- The Presentation layer then performs a GET Operation to an API Gateway to determine the status of the execution.
+- The Presentation layer then performs a HTTP GET Request to an **API Gateway** to determine the status of the execution.
 
 
 ## Logic Tier - Phase 1
