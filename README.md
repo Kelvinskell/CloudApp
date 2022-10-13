@@ -15,7 +15,7 @@ The frontend is a Python Flask Web Application deployed in an **ECS Cluster** on
      - The instance-configuration dashboard is used to define configuration details for EC2 Instances. 
        - Instructions are sent to a "config" **SQS Queue** from where they are read from a **Lambda Function** in the Logic tier and persisted in the config database.
     - The users dashboard is used to view number of active users, to create new users who can authenticate and access the application or delete users from the database.
-       - The underlying _user-service_ in the Logic Tier is hwat helps to achieve this.
+       - The underlying _user-service_ in the Logic Tier helps to achieve this.
     - The application usage statistics dashboard interacts with the _view-stats_ service in the Logic Tier.
 
 This layer can only access the Logic tier but not the Data tier.
