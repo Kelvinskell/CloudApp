@@ -11,9 +11,12 @@ The frontend is a Python Flask Web Application deployed in an **ECS Fargate Clus
 - The Frontend accepts user credentials and supplies them to a RESTful **API Gateway**
 - The API Gateway invokes an **Express Step Function.**
 - The frontend also exposes an _Admin_ dashboard for viewing statistics and performimg administrative actions.
-  - The admin page contains other implementations such as user creation dashboard, instance configuration dashboard, application usage statistics dashboard and Stop-instance button.
-  - The instance-configuration dashboard is used to define configuration details for EC2 Instances. 
-     - Instructions are sent to a "config" **SQS Queue** from where they are read from a **Lambda Function** in the Logic tier and persisted in the config database.
+  - The admin page contains other implementations such as users dashboard, instance configuration dashboard, application usage statistics dashboard and Stop-instance button.
+     - The instance-configuration dashboard is used to define configuration details for EC2 Instances. 
+       - Instructions are sent to a "config" **SQS Queue** from where they are read from a **Lambda Function** in the Logic tier and persisted in the config database.
+    - The users dashboard is used to view number of active users, to create new users who can authenticate and access the application or delete users from the database.
+       - The underlying _user-service_ in the Logic Tier is hwat helps to achieve this.
+    - The application usage statistics dashboard interacts with the _view-stats_ service in the Logic Tier.
 
 This layer can only access the Logic tier but not the Data tier.
 
@@ -43,8 +46,10 @@ This tier also is also the only tier that can directly access the database - whi
  The Presentation tier connects to this tier if user authentication from the previous step is successful.
  ### Technical Design
  - Three microservices are implemented at this phase of the Logic tier.
-   - **create-user service:** This service is responsible for creating users.
+   - **user-service:** This service is responsible for creating users.
      - It interacts with the Data tier to create and store the user credentials.
+     - Displays the total number of users and their details.
+     - Can also delete users from the database.
      - This service can only be accessed through the admin page in the Presentation layer - hence, access is restricted only to Admins.
    - **provision-instance service:** This service provisons **EC2 instances**.
      - It will provision an **Ec2 instance** complete with all necessary installations and configurations.
