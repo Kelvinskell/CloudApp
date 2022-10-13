@@ -8,15 +8,16 @@ The three-tier acrchitectuiire comprises of the **Presentation Tier, Logic Tier 
 ## Presentation Tier
 The frontend is a Python Flask Web Application deployed in an **ECS Cluster** on Fargate.
 ### Technical Design
-- The Frontend accepts user credentials and supplies them to a RESTful **API Gateway**
-- The API Gateway invokes an **Express Step Function.**
+- User creation, authetication and deletion is handled by **Amazon Cognito.**
+- **Amazon Cognito** is integrated with a post-authentication trigger which calls an "auth" **Lambda Function** from the Logic tier for further processing of the JSON Web Tokens (JWT) and persisting the data in the Data Tier if a new user is created.
+- If authentication is successful, a **Step Function** is invoked and a workflow begins in the Logic Tier.
 - The frontend also exposes an _Admin_ dashboard for viewing statistics and performimg administrative actions.
   - The admin page contains other implementations such as users dashboard, instance configuration dashboard, application usage statistics dashboard and Stop-instance button.
-     - The instance-configuration dashboard is used to define configuration details for EC2 Instances. 
-       - Instructions are sent to a "config" **SQS Queue** from where they are read from a **Lambda Function** in the Logic tier and persisted in the config database.
-    - The users dashboard is used to view number of active users, to create new users who can authenticate and access the application or delete users from the database.
-       - The underlying _user-service_ in the Logic Tier helps to achieve this.
-    - The application usage statistics dashboard interacts with the _view-stats_ service in the Logic Tier.
+     1. The _instance-configuration_ dashboard is used to define configuration details for EC2 Instances. 
+       - Instructions are sent to a "config" **SQS Queue** from where they are read from a "config" **Lambda Function** in the Logic tier and persisted in the config database.
+    2. The _users dashboard_ is used to view number of active users, to create new users who can authenticate and access the application or delete users from the database.
+       - Interaction with **Amazon Cognito** helps to achieve this.
+    3. The _application usage statistics_ dashboard interacts with the _view-stats_ service in the Logic Tier.
 
 This layer can only access the Logic tier but not the Data tier.
 
@@ -26,12 +27,7 @@ The logic tier is where the core of the application resides. Phase 1 of this tie
 This tier also is also the only tier that can directly access the database - which resides in the Data tier.
 ### Technical Design
 - The **Step Function** calls an "auth" **Lambda Function** to process the credentials passed to it by the Presentation tier.
-- This lambda function connects with the Data tier and checks the credentials against a user database. Based on the checks, this function will either return _"True"_ or _"False"._
-  - If _False_, the **Step Function** will return an "Error" message to the Flask App in the Presentation Tier and then exits.
-  - The presentation Tier then displays an "Authentication Error" message to the user.
-  - If _True_, a "Success" message is returned.
-    - An "inform" **Lambda Function** sends an SNS message to the Admin, about a successful login. 
-    - The flask application in the presentation tier then displays an authentication message to the user.
+  - The **Step Function** uses a Choice state to detr 
     - A "config" **Lambda Function** will check the  "config" **SQS Queue** for any new messages.
       - If present, the function updates the "config" database with the latest configuration instructions.
     - The **Step Function** exits.
