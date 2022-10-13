@@ -6,12 +6,13 @@ This application is a Cloud-Native app, built using a serverless three-tier arch
 The three-tier acrchitectuiire comprises of the **Presentation Tier, Logic Tier and Application Tier.**
 
 ## Presentation Tier
-The frontend is a Python Flask Web Application deployed in an **ECS Cluster.**
+The frontend is a Python Flask Web Application deployed in an **ECS Fargate Cluster.**
 ### Technical Design
 - The Frontend accepts user credentials and supplies them to a RESTful **API Gateway**
 - The API Gateway invokes an **Express Step Function.**
 - The frontend also exposes an _Admin_ dashboard for viewing statistics and performimg administrative actions.
-  - The admin page contains other implementations such as user creation capability, application usage statistics and Stop-instance capability.
+  - The admin page contains other implementations such as user creation capability, instance configuration instructions, application usage statistics and Stop-instance capability.
+  - The instance-configuration instructions are sent to a "config" **SQS Queue** from where they are read from a **Lambda Function** in the Logic tier and persisted in a NOSQL database.
 
 This layer can only access the logic tier but not the Data tier.
 
@@ -25,11 +26,13 @@ This tier also is also the only tier that can directly access the database - whi
   - If _False_, the **Step Function** will return an "Error" message to the Flask App in the Presentation Tier and then exits.
   - The presentation Tier then displays an "Authentication Error" message to the user.
   - If _True_, a "Success" message is returned.
-    - A **Lambda Function** sends an SNS message to the Admin, about a successful login. 
+    - An "inform" **Lambda Function** sends an SNS message to the Admin, about a successful login. 
     - The flask application in the presentation tier then displays an authentication message to the user.
+    - A "config" **Lambda Function** will check the  "config" **SQS Queue** for any new messages.
+      - If present, the function updates the NOSQL Database with the latest configuration instructions.
     - The **Step Function** exits.
   - This phase also implements a **lambda Function** that will be executed when the "Stop-instance" button in the Admin page is clicked.
-  - This function will abruptly shutdown the specified EC2 instance.
+    - This function will abruptly shutdown the specified EC2 instance.
     
  ## Logic Tier - Phase 2
  This is the second part of the logic tier and implements the core functionalities of this application.
@@ -44,7 +47,7 @@ This tier also is also the only tier that can directly access the database - whi
      - This service can only be accessed through the admin page in the Presentation layer - hence, access is restricted only to Admins.
    - **provision-instance service:** This service provisons **EC2 instances**.
      - It will provision an **Ec2 instance** complete with all necessary installations and configurations.
-     - It then return login details for the instance back to the Presentation layer - which will display this to the user.
+     - It reads configuration instructions from a NOSQL Database in the Data Tier and provisions the instance accoridng to specified configurations.
      - Instance details and user-details will be uploaded to a designated **S3 bucket** where they will be analysed by another service.
      - It will also send an SNS Email notification to the Admin, about instance creation.
    - **view-stats service:** This service provides a dashboard for admins to view and analyse application state.
@@ -55,7 +58,9 @@ This tier also is also the only tier that can directly access the database - whi
   - **Helm** is utilised to package the Kubernetes manifests.
   
   ## Data Tier
-  **Amazon Aurora Serverless** is used as the database for the application. This database resides in the Data-tier and can only be directly accessed by the Logic tier. All valid user credentials are stored in this datbase.
+  **Amazon Aurora Serverless** is used as the user database for the application. This database resides in the Data-tier and can only be directly accessed by the Logic tier. All valid user credentials are stored in this datbase.
+  
+  **DynamoDB** is used as the NOSQL Database for the application. This is where the provision-instance service in the Logic tier will read instance configuration instructions from. 
   
   ## Extras
   - **Terraform scripts** for provisioning AWS Cloud Infrastructure.
