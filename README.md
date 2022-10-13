@@ -15,7 +15,7 @@ This layer can only access the Logic tier but not the Data Tier.
 - **Amazon Cognito** is integrated with a post-authentication trigger which calls an "auth" **Lambda Function** for further processing of the JSON Web Tokens (JWT) and sends an **SNS Email Notification** to the Admins - when a new user is created.
 - The frontend exposes a _Regular user_ page and an _Admin user_ page.
 - The _Admin user_ page requires additional authentication for access and is used for viewing application statistics and performing administrative actions.
-  - The admin page contains implementations such as users dashboard, instance configuration dashboard, application usage statistics dashboard and Stop-instance button.
+- The admin page contains implementations such as users dashboard, instance configuration dashboard, application usage statistics dashboard and Stop-instance button.
      1. The _instance-configuration_ dashboard is used to define configuration details for EC2 Instances. 
        - This is achived by interacting with the _configure instance_ service in the Logic tier.
     2. The _users dashboard_ is used to view number of active users, to create new users who can authenticate and access the application or delete users from the database.
