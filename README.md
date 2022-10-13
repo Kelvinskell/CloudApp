@@ -41,7 +41,7 @@ This tier also is also the only tier that can directly access the database - whi
  ## Logic Tier - Phase 2
  This is the second part of the logic tier and implements the core functionalities of this application.
  
- This phase is made up of an **EKS Cluster** which exposes three (3) services using a Microservices architecture.
+ This phase is made up of an **EKS Cluster** on AWS Fargate which exposes three (3) services using a Microservices architecture.
  
  The Presentation tier connects to this tier if user authentication from the previous step is successful.
  ### Technical Design
@@ -56,6 +56,7 @@ This tier also is also the only tier that can directly access the database - whi
      - It reads configuration instructions from the database in the Data Tier and provisions the instance accoridng to specified configurations.
      - Instance details and user-details will be uploaded to a designated **S3 bucket** where they will be analysed by another service.
      - It will also send an SNS Email notification to the Admin, about instance creation.
+     - Instance login details are then returned to the Presentation Tier - where they are displayed to the User.
    - **view-stats service:** This service provides a dashboard for admins to view and analyse application state.
      - Uses **Amazon Athena** to query the designated **S3 bucket** for data analysis and returns statistics to the Presentation tier.
      - This service can only be accessed through the Admin page in the presentation tier.
